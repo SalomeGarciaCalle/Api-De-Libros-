@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Librería API - Frontend</title>
+
+  <!-- Bootstrap CSS -->
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
+    rel="stylesheet"
+  >
+
+  <style>
+    body {
+      background: #f4f4f4;
+    }
+    .titulo {
+      margin-top: 30px;
+      text-align: center;
+      font-weight: 700;
+      color: #333;
+    }
+    .card {
+      border-radius: 12px;
+    }
+    table {
+      border-radius: 12px;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="titulo">📚 Catálogo de Libros</h1>
+
+  <div class="container mt-5">
+    <div class="card shadow p-4">
+      <h4>Listado de libros</h4>
+      <table class="table table-striped table-hover mt-3">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Stock</th>
+          </tr>
+        </thead>
+        <tbody id="tablaLibros">
+          <tr>
+            <td colspan="6" class="text-center">Cargando...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const tabla = document.getElementById("tablaLibros");
+
+    fetch("http://localhost:3000/libros")
+      .then(res => res.json())
+      .then(libros => {
+        tabla.innerHTML = ""; // limpia "Cargando..."
+        libros.forEach(libro => {
+          tabla.innerHTML += `
+            <tr>
+              <td>${libro.id}</td>
+              <td>${libro.titulo}</td>
+              <td>${libro.autor}</td>
+              <td>${libro.categoria}</td>
+              <td>$ ${libro.precio}</td>
+              <td>${libro.stock}</td>
+            </tr>
+          `;
+        });
+      })
+      .catch(err => {
+        tabla.innerHTML = `<tr><td colspan="6" class="text-danger">Error al cargar la API</td></tr>`;
+      });
+  </script>
+
+</body>
+</html>
